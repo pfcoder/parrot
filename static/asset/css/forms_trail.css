@@ -1,0 +1,131 @@
+#topBar {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #0079d4;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 20px; }
+
+.form-split-line {
+  margin-top: 26px;
+  border: 1px solid #dddddd;
+  width: 100%; }
+
+.send-button {
+  height: 40px;
+  margin-top: 26px;
+  border-radius: 8px;
+  width: 100%;
+  border: 0px;
+  background: #0079d3;
+  color: white; }
+
+#form_div {
+  padding: 16px;
+  padding-top: 0px; }
+  #form_div label {
+    color: #bbbbbb;
+    font-size: 16px;
+    display: block;
+    margin-left: 16px;
+    margin-top: 16px; }
+  #form_div input {
+    border-radius: 6px;
+    border: 0px;
+    background: #e4e5e7;
+    height: 36px; }
+  #form_div span {
+    display: inline-block;
+    width: 28%;
+    line-height: 36px;
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 16px; }
+
+.clear_both {
+  clear: both; }
+
+#topBar {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #0079d4;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 20px; }
+
+.form-split-line {
+  margin-top: 26px;
+  border: 1px solid #dddddd;
+  width: 100%; }
+
+.send-button {
+  height: 40px;
+  margin-top: 26px;
+  border-radius: 8px;
+  width: 100%;
+  border: 0px;
+  background: #0079d3;
+  color: white; }
+
+#form_div {
+  padding: 16px;
+  padding-top: 0px; }
+  #form_div label {
+    color: #bbbbbb;
+    font-size: 16px;
+    display: block;
+    margin-left: 16px;
+    margin-top: 16px; }
+  #form_div input {
+    border-radius: 6px;
+    border: 0px;
+    background: #e4e5e7;
+    height: 36px; }
+  #form_div span {
+    display: inline-block;
+    width: 28%;
+    line-height: 36px;
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 16px; }
+
+.clear_both {
+  clear: both; }
+
+#form_div span {
+  width: 6%; }
+
+#form_div #hospitalName {
+  width: 100%; }
+
+#form_div #city {
+  width: 100%; }
+
+#form_div #user {
+  width: 100%; }
+
+#form_div #applicant {
+  width: 100%; }
+
+#form_div #contact {
+  width: 100%; }
+
+#form_div #prod {
+  width: 100%; }
+
+#form_div #model {
+  width: 100%; }
+
+#form_div #month {
+  width: 41%; }
+
+#form_div #day {
+  width: 41%; }
+
+#form_div #bday {
+  width: 41%; }
+
+#form_div #bmonth {
+  width: 41%; }
+
+/*# sourceMappingURL=forms_trail.css.map */

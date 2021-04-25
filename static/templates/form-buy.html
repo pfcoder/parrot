@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>我想购买</title>
+
+    <link rel="stylesheet" href="/asset/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/asset/css/master.css" />
+
+    <link rel="stylesheet" href="/asset/css/forms_buy.css" />
+  </head>
+  <body>
+    <div id="frame">
+      <div id="topBar">我想购买</div>
+
+      <form method="POST" action="/submit" accept-charset="UTF-8" id="buy_form">
+        <input name="_token" type="hidden" value="{{token}}" />
+        <input name="form_type" type="hidden" value="buy" />
+        <input name="form_title" type="hidden" value="我想购买" />
+
+        <div id="form_div">
+          <label for="perOrcom" class="input_lablel">单位还是个人购买</label>
+          <input id="perOrcom" name="per_com" type="text" value="" />
+
+          <label for="company" class="input_lablel">单位名称</label>
+          <input id="company" name="company" type="text" value="" />
+
+          <label for="city" class="input_lablel">单位所在城市</label>
+          <input id="city" name="city" type="text" value="" />
+
+          <label for="name" class="input_lablel">您的姓名</label>
+          <input id="name" name="name" type="text" value="" />
+
+          <label for="contact" class="input_lablel"
+            >您的联系方式 (手机或固定电话)</label
+          >
+          <input id="contact" name="contact" type="text" value="" />
+
+          <label for="prod" class="input_lablel">产品</label>
+          <input id="prod" name="prod" type="text" value="" />
+
+          <label for="model" class="input_lablel">型号</label>
+          <input id="model" name="model" type="text" value="" />
+
+          <label for="amount" class="input_lablel">数量</label>
+          <input id="amount" name="amount" type="number" value="" />
+
+          <div class="form-split-line"></div>
+          <button class="send-button" id="submitform">发送</button>
+        </div>
+      </form>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="/asset/js/jquery-1.11.3.min.js"
+    ></script>
+    <script type="text/javascript" src="/asset/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/asset/js/master.js"></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        var submitBtn = document.getElementById('submitform');
+        var oForm = document.getElementById('buy_form');
+        oForm.onsubmit = function () {
+          if (inputsEmpty()) {
+            alert('请完善表单信息!!');
+            return false;
+          } else {
+            if (confirm('是否确认提交表单?')) {
+              submitBtn.disabled = true;
+              submitBtn.style.background = '#999999';
+              submitBtn.innerHTML = '已发送';
+              return true;
+            } else {
+              return false;
+            }
+          }
+        };
+      };
+
+      function inputsEmpty() {
+        var oInput = document.getElementsByTagName('input');
+        for (var i = 0; i < oInput.length; i++) {
+          if (isEmpty(oInput[i])) {
+            return true;
+          }
+        }
+        var oTextArea = document.getElementsByTagName('textarea');
+        for (var i = 0; i < oTextArea.length; i++) {
+          if (isEmpty(oTextArea[i])) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function isEmpty(input) {
+        var text = stripSpace(input.value);
+        return text == '' ? true : false;
+      }
+
+      function stripSpace(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, '');
+      }
+    </script>
+  </body>
+</html>

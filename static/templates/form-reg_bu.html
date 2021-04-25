@@ -1,0 +1,237 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>豪友荟商业会员注册信息表</title>
+
+    <link rel="stylesheet" href="/asset/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/asset/css/master.css" />
+
+    <link rel="stylesheet" href="/asset/css/forms_businessreg.css" />
+  </head>
+  <body>
+    <div id="frame">
+      <div id="topBar">豪友荟商业会员注册信息表</div>
+
+      <form
+        method="POST"
+        action="/submit/reg_bu"
+        accept-charset="UTF-8"
+        id="businessreg_form"
+      >
+        <input name="_token" type="hidden" value="{{token}}" />
+        <input name="form_type" type="hidden" value="reg_bu" />
+        <input name="form_title" type="hidden" value="商业会员注册" />
+        <div id="form_div">
+          <label for="username" class="input_lablel">邮箱(作为登录名)</label>
+          <input id="username" name="username" type="text" value="" />
+
+          <label for="password" class="input_lablel">密码</label>
+          <input name="password" type="password" value="" id="password" />
+
+          <label for="passwordq" class="input_lablel">密码提示问题</label>
+          <input id="passwordq" name="passwordq" type="text" value="" />
+
+          <label for="passworda" class="input_lablel">密码提示答案</label>
+          <input id="passworda" name="passworda" type="text" value="" />
+
+          <label for="usertype" class="input_lablel">用户类型</label>
+          <input
+            id="usertype"
+            disabled="disabled"
+            name="usertype"
+            type="text"
+            value="商业会员"
+          />
+
+          <label for="name" class="input_lablel">企业名称</label>
+          <input id="name" name="name" type="text" value="" />
+
+          <label for="address" class="input_lablel">地址</label>
+          <input id="address" name="address" type="text" value="" />
+
+          <label for="postcode" class="input_lablel">邮编</label>
+          <input id="postcode" name="postcode" type="text" value="" />
+
+          <label for="personincharge" class="input_lablel">负责人</label>
+          <input
+            id="personincharge"
+            name="personincharge"
+            type="text"
+            value=""
+          />
+
+          <label for="tel" class="input_lablel">联系电话</label>
+          <input id="tel" name="tel" type="text" value="" />
+
+          <label for="cell" class="input_lablel">负责人手机</label>
+          <input id="cell" name="cell" type="text" value="" />
+
+          <label for="area" class="input_lablel">拟销售区域</label>
+          <input id="province" name="province" type="text" value="" />
+          <span>省</span>&nbsp;
+          <input id="city" name="city" type="text" value="" />
+          <span style="display: inline">市/县</span>
+
+          <label for="mainbusiness" class="input_lablel">公司主营业务</label>
+
+          <input
+            id="yk"
+            class="expertise_radio"
+            checked="checked"
+            name="mainbusiness"
+            type="radio"
+            value="yk"
+          />
+          <label for="yk" class="expertise_label">集中在眼科</label>
+          <br />
+          <input
+            id="other"
+            class="expertise_radio"
+            name="mainbusiness"
+            type="radio"
+            value="other"
+          />
+          <label for="other" class="expertise_label">涉及其他临床领域</label>
+
+          <label for="sellingbrand" class="input_lablel"
+            >公司常年经销的眼科品牌</label
+          >
+          <input id="sellingbrand" name="sellingbrand" type="text" value="" />
+
+          <label for="recommander" class="input_lablel">推荐人</label>
+
+          <input
+            id="rec_no"
+            class="expertise_radio"
+            checked="checked"
+            name="recommander"
+            type="radio"
+            value="no"
+          />
+          <label for="rec_no" class="expertise_label">无</label>
+          <br />
+          <input
+            id="rec_yes"
+            class="expertise_radio"
+            checked="checked"
+            name="recommander"
+            type="radio"
+            value="yes"
+          />
+          <label for="rec_yes" class="expertise_label">有</label>
+          <input
+            id="recommander_name"
+            placeholder="推荐人登录名或公司全称"
+            name="recommander_name"
+            type="text"
+            value=""
+          />
+
+          <label for="subcompany" class="input_lablel">下属关联公司</label>
+          <input
+            id="sub_no"
+            class="expertise_radio"
+            checked="checked"
+            name="subcompany"
+            type="radio"
+            value="no"
+          />
+          <label for="sub_no" class="expertise_label">无</label>
+          <br />
+          <input
+            id="sub_yes"
+            class="expertise_radio"
+            checked="checked"
+            name="subcompany"
+            type="radio"
+            value="yes"
+          />
+          <label for="sub_yes" class="expertise_label">有</label>
+          <input
+            id="subcompany_name"
+            placeholder="有请如实填写"
+            name="subcompany_name"
+            type="text"
+            value=""
+          />
+
+          <div class="foot_note">
+            <br />
+            备注：
+            <br />
+            1.请邮寄纸质支持性文件复印件（公司营业执照、组织机构代码证、国/地税务证、医疗器械经营许可证。三证合一企业只需提交公司营业执照和医疗器械经营许可证）到:
+            北京市朝阳区望京SOHO塔1A区110817，Lucy 收18512119112。
+            <br />
+            2.我们会在收到您公司的支持性文件后10个工作日内将入会申请结果发邮件至您申请时填写的邮箱地址。
+          </div>
+
+          <div class="form-split-line"></div>
+          <button class="send-button" id="submitform">发送</button>
+        </div>
+      </form>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="/asset/js/jquery-1.11.3.min.js"
+    ></script>
+    <script type="text/javascript" src="/asset/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/asset/js/master.js"></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        var submitBtn = document.getElementById('submitform');
+        var oForm = document.getElementById('businessreg_form');
+        oForm.onsubmit = function () {
+          if (inputsEmpty()) {
+            alert('请完善表单信息!!');
+            return false;
+          } else {
+            if (confirm('是否确认提交表单?')) {
+              submitBtn.disabled = true;
+              submitBtn.style.background = '#999999';
+              submitBtn.innerHTML = '已发送';
+              return true;
+            } else {
+              return false;
+            }
+          }
+        };
+      };
+
+      function inputsEmpty() {
+        var oInput = document.getElementsByTagName('input');
+        for (var i = 0; i < oInput.length; i++) {
+          if (isEmpty(oInput[i])) {
+            return true;
+          }
+        }
+        var oTextArea = document.getElementsByTagName('textarea');
+        for (var i = 0; i < oTextArea.length; i++) {
+          if (isEmpty(oTextArea[i])) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function isEmpty(input) {
+        if (
+          input.id == 'province' ||
+          (document.getElementById('sub_no').checked &&
+            input.id == 'subcompany_name') ||
+          (document.getElementById('rec_no').checked &&
+            input.id == 'recommander_name')
+        )
+          return false;
+        var text = stripSpace(input.value);
+        return text == '' ? true : false;
+      }
+
+      function stripSpace(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, '');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,201 @@
+#topBar {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #0079d4;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 20px; }
+
+.form-split-line {
+  margin-top: 26px;
+  border: 1px solid #dddddd;
+  width: 100%; }
+
+.send-button {
+  height: 40px;
+  margin-top: 26px;
+  border-radius: 8px;
+  width: 100%;
+  border: 0px;
+  background: #0079d3;
+  color: white; }
+
+#form_div {
+  padding: 16px;
+  padding-top: 0px; }
+  #form_div label {
+    color: #bbbbbb;
+    font-size: 16px;
+    display: block;
+    margin-left: 16px;
+    margin-top: 16px; }
+  #form_div input {
+    border-radius: 6px;
+    border: 0px;
+    background: #e4e5e7;
+    height: 36px; }
+  #form_div span {
+    display: inline-block;
+    width: 28%;
+    line-height: 36px;
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 16px; }
+
+.clear_both {
+  clear: both; }
+
+#topBar {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #0079d4;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 20px; }
+
+.form-split-line {
+  margin-top: 26px;
+  border: 1px solid #dddddd;
+  width: 100%; }
+
+.send-button {
+  height: 40px;
+  margin-top: 26px;
+  border-radius: 8px;
+  width: 100%;
+  border: 0px;
+  background: #0079d3;
+  color: white; }
+
+#form_div {
+  padding: 16px;
+  padding-top: 0px; }
+  #form_div label {
+    color: #bbbbbb;
+    font-size: 16px;
+    display: block;
+    margin-left: 16px;
+    margin-top: 16px; }
+  #form_div input {
+    border-radius: 6px;
+    border: 0px;
+    background: #e4e5e7;
+    height: 36px; }
+  #form_div span {
+    display: inline-block;
+    width: 28%;
+    line-height: 36px;
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 16px; }
+
+.clear_both {
+  clear: both; }
+
+#question {
+  border-radius: 6px;
+  border: 0px;
+  background: #e4e5e7;
+  height: 93.6px;
+  width: 100%;
+  outline: none;
+  resize: none; }
+
+#form_div input {
+  padding-left: 15px; }
+
+#form_div span {
+  width: 6%; }
+
+#form_div #sellingbrand {
+  width: 100%; }
+
+#form_div #address {
+  width: 100%; }
+
+#form_div #postcode {
+  width: 100%; }
+
+#form_div #personincharge {
+  width: 100%; }
+
+#form_div #tel {
+  width: 100%; }
+
+#form_div #cell {
+  width: 100%; }
+
+#form_div #email {
+  width: 100%; }
+
+#form_div #id {
+  width: 100%; }
+
+#form_div #recommander {
+  width: 100%; }
+
+#form_div #username {
+  width: 100%; }
+
+#form_div #password {
+  width: 100%; }
+
+#form_div #passworda {
+  width: 100%; }
+
+#form_div #passwordq {
+  width: 100%; }
+
+#form_div #usertype {
+  width: 100%; }
+
+#form_div #name {
+  width: 100%; }
+
+#form_div #company {
+  width: 100%; }
+
+#form_div #title {
+  width: 100%; }
+
+#form_div #subcompany_name {
+  margin-left: 8px;
+  padding-left: 0px;
+  width: 200px;
+  text-align: center; }
+
+#form_div #recommander_name {
+  margin-left: 8px;
+  padding-left: 0px;
+  width: 200px;
+  text-align: center; }
+
+#form_div .expertise_radio {
+  height: 14px;
+  width: auto; }
+
+#form_div .expertise_label {
+  color: #bbbbbb;
+  font-size: 17px;
+  font-weight: 400;
+  display: inline;
+  margin-left: auto; }
+
+#form_div .foot_note {
+  padding: 5px;
+  font-size: 14px;
+  line-height: 16px; }
+
+#form_div .notice_keyword {
+  font-size: 14px;
+  line-height: 16px;
+  display: inline;
+  color: red; }
+
+#province {
+  width: 37%; }
+
+#city {
+  width: 37%; }
+
+/*# sourceMappingURL=forms_businessreg.css.map */
