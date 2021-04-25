@@ -5,10 +5,11 @@ use lettre::{Message, SmtpTransport, Transport};
 use std::env;
 
 pub fn send_mail(body_html: String, body_text: String, subject: String) {
+	let to = env::var("MAIL_TO").unwrap_or("report <3276628@qq.com>".to_string());
 	let email = Message::builder()
 		.from("test <bflpsupp@163.com>".parse().unwrap())
 		.reply_to("test <bflpsupp@163.com>".parse().unwrap())
-		.to("report <3276628@qq.com>".parse().unwrap())
+		.to(to.parse().unwrap())
 		.subject(subject)
 		.multipart(
 			MultiPart::alternative() // This is composed of two parts.
