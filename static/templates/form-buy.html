@@ -14,7 +14,12 @@
     <div id="frame">
       <div id="topBar">我想购买</div>
 
-      <form method="POST" action="/submit" accept-charset="UTF-8" id="buy_form">
+      <form
+        method="POST"
+        action="/submit/buy"
+        accept-charset="UTF-8"
+        id="buy_form"
+      >
         <input name="_token" type="hidden" value="{{token}}" />
         <input name="form_type" type="hidden" value="buy" />
         <input name="form_title" type="hidden" value="我想购买" />
