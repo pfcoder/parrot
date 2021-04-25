@@ -46,7 +46,6 @@ async fn submit_trail(
         }
     };
 
-    // 试用申请, 申请人: 彭江 联系方式: 18616373112
     let subject = format!(
         "{}, 申请人: {} 联系方式: {}",
         trail_data.form_title, trail_data.applicant, trail_data.contact
