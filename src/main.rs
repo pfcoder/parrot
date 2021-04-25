@@ -12,6 +12,7 @@ use actix_web::middleware;
 use actix_web::middleware::errhandlers::{ErrorHandlerResponse, ErrorHandlers};
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
 use handlebars::Handlebars;
+use std::env;
 
 mod form_modal;
 mod mailer;
@@ -263,7 +264,9 @@ async fn main() -> std::io::Result<()> {
         .unwrap();
     let handlebars_ref = web::Data::new(handlebars);
 
-    println!("Parrot server start on 8080");
+    let bind = env::var("PARROT_SERVER").unwrap_or("127.0.0.1:8080".to_string());
+
+    println!("Parrot server start on {}", bind);
 
     HttpServer::new(move || {
         App::new()
@@ -278,7 +281,7 @@ async fn main() -> std::io::Result<()> {
             .service(submit_repair)
             .service(Files::new("/asset", "static/asset/").show_files_listing())
     })
-    .bind("127.0.0.1:8080")?
+    .bind(bind)?
     .run()
     .await
 }
