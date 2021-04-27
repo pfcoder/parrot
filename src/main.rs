@@ -280,6 +280,7 @@ async fn main() -> std::io::Result<()> {
             .service(submit_reg_ps)
             .service(submit_repair)
             .service(Files::new("/asset", "static/asset/").show_files_listing())
+            .service(Files::new("/", "static/html/").index_file("index.html"))
     })
     .bind(bind)?
     .run()

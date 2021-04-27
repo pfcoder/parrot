@@ -1,0 +1,207 @@
+#topBar {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #0079d4;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 20px; }
+
+.form-split-line {
+  margin-top: 26px;
+  border: 1px solid #dddddd;
+  width: 100%; }
+
+.send-button {
+  height: 40px;
+  margin-top: 26px;
+  border-radius: 8px;
+  width: 100%;
+  border: 0px;
+  background: #0079d3;
+  color: white; }
+
+#form_div {
+  padding: 16px;
+  padding-top: 0px; }
+  #form_div label {
+    color: #bbbbbb;
+    font-size: 16px;
+    display: block;
+    margin-left: 16px;
+    margin-top: 16px; }
+  #form_div input {
+    border-radius: 6px;
+    border: 0px;
+    background: #e4e5e7;
+    height: 36px; }
+  #form_div span {
+    display: inline-block;
+    width: 28%;
+    line-height: 36px;
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 16px; }
+
+.clear_both {
+  clear: both; }
+
+#topBar {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #0079d4;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 20px; }
+
+.form-split-line {
+  margin-top: 26px;
+  border: 1px solid #dddddd;
+  width: 100%; }
+
+.send-button {
+  height: 40px;
+  margin-top: 26px;
+  border-radius: 8px;
+  width: 100%;
+  border: 0px;
+  background: #0079d3;
+  color: white; }
+
+#form_div {
+  padding: 16px;
+  padding-top: 0px; }
+  #form_div label {
+    color: #bbbbbb;
+    font-size: 16px;
+    display: block;
+    margin-left: 16px;
+    margin-top: 16px; }
+  #form_div input {
+    border-radius: 6px;
+    border: 0px;
+    background: #e4e5e7;
+    height: 36px; }
+  #form_div span {
+    display: inline-block;
+    width: 28%;
+    line-height: 36px;
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 16px; }
+
+.clear_both {
+  clear: both; }
+
+#topbar {
+  border-radius: 10px;
+  margin: auto;
+  background: #ffffff;
+  width: 90%;
+  height: 40px;
+  overflow: hidden;
+  border: 2px solid #218dd8; }
+  #topbar .tab {
+    float: left;
+    font-size: 14px;
+    text-align: center;
+    line-height: 40px;
+    color: #218dd8;
+    border-left: 1px solid #218dd8;
+    border-rigth: 1px solid #218dd8; }
+  #topbar .tab_active {
+    background: #218dd8;
+    color: #ffffff; }
+
+.return {
+  position: absolute;
+  top: 10px;
+  left: 10px; }
+  .return img {
+    height: 40px; }
+
+#down_arrow {
+  position: relative; }
+  #down_arrow .arrow_img {
+    position: absolute;
+    left: 0px;
+    width: 33.333333%; }
+
+.top-padding {
+  height: 20px; }
+
+#outer_frame {
+  background: #eeeeee;
+  height: 100%; }
+
+#prod_series {
+  color: #ffffff;
+  font-size: 16px;
+  background: #a7a8aa;
+  text-align: center;
+  height: 60px;
+  line-height: 60px; }
+
+#video_div {
+  text-align: center; }
+
+#prod_bg {
+  padding-bottom: 1px;
+  background: #eeeeee; }
+  #prod_bg .products {
+    display: none; }
+  #prod_bg #content_0 {
+    display: block; }
+  #prod_bg .prod {
+    position: relative;
+    height: 104px;
+    width: 94%;
+    margin: auto;
+    margin-bottom: 15px;
+    background: #ffffff; }
+    #prod_bg .prod .img_frame {
+      width: 120px;
+      height: 104px;
+      float: left; }
+      #prod_bg .prod .img_frame .head_pic {
+        width: 120px; }
+    #prod_bg .prod .word {
+      position: absolute;
+      bottom: 10px;
+      left: 120px;
+      padding: 10px;
+      padding-top: 20px;
+      height: 100px;
+      float: left; }
+      @media (max-height: 500px) {
+        #prod_bg .prod .word {
+          bottom: 20px; } }
+      #prod_bg .prod .word .prod_name {
+        font-size: 17px;
+        font-weight: 600;
+        color: #218dd8; }
+        @media (max-height: 500px) {
+          #prod_bg .prod .word .prod_name {
+            font-size: 15px; } }
+    #prod_bg .prod .link_div {
+      border-radius: 8px;
+      background: #218dd8;
+      position: absolute;
+      bottom: 10px;
+      right: 16px;
+      height: 28px;
+      width: 70px;
+      line-height: 28px;
+      text-align: center;
+      color: #ffffff;
+      padding-left: 5px;
+      font-size: 14px; }
+      @media (max-height: 500px) {
+        #prod_bg .prod .link_div {
+          height: 24px;
+          width: 60px;
+          line-height: 24px; } }
+      #prod_bg .prod .link_div .arr {
+        color: #ffffff;
+        top: 1.5px; }
+
+/*# sourceMappingURL=series.css.map */
