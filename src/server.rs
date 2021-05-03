@@ -2,6 +2,7 @@
 
 use crate::cache::add_cache;
 use crate::config::CONFIG;
+use crate::database::add_pool;
 use crate::routes::routes;
 use actix_files::Files;
 use actix_http::{body::Body, Response};
@@ -80,6 +81,7 @@ pub async fn server() -> std::io::Result<()> {
             .configure(add_cache)
             .wrap(error_handlers())
             .wrap(Logger::default())
+            .configure(add_pool)
             .app_data(handlebars_ref.clone())
             .configure(routes)
     });

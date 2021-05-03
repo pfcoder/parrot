@@ -15,10 +15,10 @@ actix-redis = "0.9.2"
 actix-rt = "1"
 #async-smtp = "0.4.0"
 csv = "1.1"
-chrono = "0.4.19"
+chrono = { version = "0.4.19", features = ["serde"] }
 
 derive_more = "0.15"
-diesel = { version = "1.4.0", features = ["chrono", "mysql", "postgres", "sqlite", "r2d2", "uuidv07"] }
+diesel = { version = "1.4.0", features = ["chrono", "mysql", "r2d2", "uuidv07"] }
 dotenv = "0.15.0"
 env_logger = "0.8"
 envy = "0.4"
@@ -35,3 +35,8 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_derive = "1.0"
 uuid = { version = "0.8", features = ["serde", "v4"]}
+
+[features]
+cockroach = []
+mysql = []
+default = ["mysql"]

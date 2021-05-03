@@ -9,6 +9,9 @@ use diesel::{
     result::{DatabaseErrorKind, Error as DBError},
 };
 
+use lettre::error::Error as LettreError;
+use lettre::transport::smtp::Error as LettreSmtpError;
+
 #[derive(Debug, Display, PartialEq)]
 #[allow(dead_code)]
 pub enum ApiError {
@@ -24,6 +27,7 @@ pub enum ApiError {
     #[display(fmt = "")]
     ValidationError(Vec<String>),
     Unauthorized(String),
+    MailError(String),
 }
 
 /// User-friendly error messages
@@ -108,5 +112,17 @@ impl From<BlockingError<ApiError>> for ApiError {
             BlockingError::Error(api_error) => api_error,
             BlockingError::Canceled => ApiError::BlockingError("Thread blocking error".into()),
         }
+    }
+}
+
+impl From<LettreError> for ApiError {
+    fn from(error: LettreError) -> ApiError {
+        ApiError::MailError(error.to_string())
+    }
+}
+
+impl From<LettreSmtpError> for ApiError {
+    fn from(error: LettreSmtpError) -> ApiError {
+        ApiError::MailError(error.to_string())
     }
 }

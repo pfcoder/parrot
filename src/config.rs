@@ -9,12 +9,15 @@
 //! multiple processing.
 
 //use crate::database::DatabaseConnection;
+use crate::database::DatabaseConnection;
 use dotenv::dotenv;
 use serde::Deserialize;
 
 #[derive(Clone, Deserialize, Debug)]
 pub struct Config {
 	pub redis_url: String,
+	pub database: DatabaseConnection,
+	pub database_url: String,
 	pub rust_backtrace: u8,
 	pub rust_log: String,
 	pub server: String,

@@ -2,13 +2,14 @@ use crate::config::CONFIG;
 use lettre::message::{header, MultiPart, SinglePart};
 use lettre::transport::smtp::authentication::Credentials;
 //use lettre::{AsyncSmtpTransport, Message, Tokio02Executor};
+use crate::errors::ApiError;
 use lettre::AsyncTransport;
 use lettre::{AsyncSmtpTransport, Message, Tokio02Executor};
 use lettre::{SmtpTransport, Transport};
 
 //use std::env;
 //#[tokio::main]
-pub fn send_mail(body_html: String, body_text: String, subject: String) {
+pub fn send_mail(body_html: String, body_text: String, subject: String) -> Result<(), ApiError> {
     let to = &CONFIG.mail_receiver;
     let email = Message::builder()
         .from("test <bflpsupp@163.com>".parse().unwrap())
@@ -31,8 +32,7 @@ pub fn send_mail(body_html: String, body_text: String, subject: String) {
                         ))
                         .body(body_html),
                 ),
-        )
-        .unwrap();
+        )?;
 
     let creds = Credentials::new(CONFIG.mail_user.clone(), CONFIG.mail_pwd.clone());
 
@@ -43,10 +43,8 @@ pub fn send_mail(body_html: String, body_text: String, subject: String) {
         .build();
 
     // Send the email
-    match mailer.send(&email) {
-        Ok(_) => println!("Email sent successfully!"),
-        Err(e) => panic!("Could not send email: {:?}", e),
-    }
+    mailer.send(&email)?;
+    Ok(())
 
     /*let mailer: AsyncSmtpTransport<Tokio02Executor> =
         AsyncSmtpTransport::<Tokio02Executor>::relay("smtp.163.com")

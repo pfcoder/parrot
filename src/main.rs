@@ -1,4 +1,6 @@
 #[macro_use]
+extern crate diesel;
+#[macro_use]
 extern crate serde_json;
 #[macro_use]
 extern crate lazy_static;
@@ -9,11 +11,14 @@ extern crate serde_derive;
 
 mod cache;
 mod config;
+mod database;
 mod errors;
 mod form_modal;
 pub mod handlers;
 mod mailer;
+mod models;
 mod routes;
+mod schema;
 mod server;
 mod store;
 

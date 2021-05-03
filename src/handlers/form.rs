@@ -1,9 +1,15 @@
 use crate::cache::{delete, get, set, Cache};
+use crate::database::PoolType;
 use crate::form_modal::{BuyData, Forms, RegisterDataBu, RegisterDataPs, RepairData, TrailData};
 use crate::mailer::send_mail;
+use crate::models::form_buy::create_form_buy;
+use crate::models::form_register_bu::create_form_register_bu;
+use crate::models::form_register_ps::create_form_register_ps;
+use crate::models::form_repair::create_form_repair;
+use crate::models::form_trail::create_form_trail;
 use crate::store::form_store;
 use actix_web::http::StatusCode;
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, post, web, web::block, HttpResponse, Responder};
 use handlebars::Handlebars;
 use uuid::Uuid;
 
@@ -11,6 +17,7 @@ use uuid::Uuid;
 pub async fn submit_trail(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
+    pool: web::Data<PoolType>,
     form_data: web::Form<TrailData>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
@@ -34,6 +41,13 @@ pub async fn submit_trail(
     let trail_form: Forms = Forms::Trail(trail_data.clone());
     form_store(&trail_form);
 
+    // write databse
+    let clone_date = trail_data.clone();
+    match block(move || create_form_trail(&pool, &clone_date.into())).await {
+        Ok(()) => println!("write db success"),
+        Err(e) => println!("write db error: {}", e),
+    }
+
     // build data kvs json map
     let body = match hb.render("table", &trail_data.get_json_maps()) {
         Ok(body) => body,
@@ -48,7 +62,7 @@ pub async fn submit_trail(
     );
 
     // TODO: provide text format
-    send_mail(body.clone(), body, subject);
+    block(move || send_mail(body.clone(), body, subject)).await;
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -59,6 +73,7 @@ pub async fn submit_trail(
 pub async fn submit_buy(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
+    pool: web::Data<PoolType>,
     form_data: web::Form<BuyData>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
@@ -82,6 +97,13 @@ pub async fn submit_buy(
     let buy_form: Forms = Forms::Buy(buy_data.clone());
     form_store(&buy_form);
 
+    // write databse
+    let clone_date = buy_data.clone();
+    match block(move || create_form_buy(&pool, &clone_date.into())).await {
+        Ok(()) => println!("write db success"),
+        Err(e) => println!("write db error: {}", e),
+    }
+
     // build data kvs json map
     let body = match hb.render("table", &buy_data.get_json_maps()) {
         Ok(body) => body,
@@ -96,7 +118,7 @@ pub async fn submit_buy(
     );
 
     // TODO: provide text format
-    send_mail(body.clone(), body, subject);
+    block(move || send_mail(body.clone(), body, subject)).await;
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -107,6 +129,7 @@ pub async fn submit_buy(
 pub async fn submit_reg_bu(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
+    pool: web::Data<PoolType>,
     form_data: web::Form<RegisterDataBu>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
@@ -130,6 +153,13 @@ pub async fn submit_reg_bu(
     let regbu_form: Forms = Forms::RegisterBu(regbu_data.clone());
     form_store(&regbu_form);
 
+    // write databse
+    let clone_date = regbu_data.clone();
+    match block(move || create_form_register_bu(&pool, &clone_date.into())).await {
+        Ok(()) => println!("write db success"),
+        Err(e) => println!("write db error: {}", e),
+    }
+
     // build data kvs json map
     let body = match hb.render("table", &regbu_data.get_json_maps()) {
         Ok(body) => body,
@@ -144,7 +174,7 @@ pub async fn submit_reg_bu(
     );
 
     // TODO: provide text format
-    send_mail(body.clone(), body, subject);
+    block(move || send_mail(body.clone(), body, subject)).await;
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -155,6 +185,7 @@ pub async fn submit_reg_bu(
 pub async fn submit_reg_ps(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
+    pool: web::Data<PoolType>,
     form_data: web::Form<RegisterDataPs>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
@@ -178,6 +209,13 @@ pub async fn submit_reg_ps(
     let regps_form: Forms = Forms::RegisterPs(regps_data.clone());
     form_store(&regps_form);
 
+    // write databse
+    let clone_date = regps_data.clone();
+    match block(move || create_form_register_ps(&pool, &clone_date.into())).await {
+        Ok(()) => println!("write db success"),
+        Err(e) => println!("write db error: {}", e),
+    }
+
     // build data kvs json map
     let body = match hb.render("table", &regps_data.get_json_maps()) {
         Ok(body) => body,
@@ -192,7 +230,7 @@ pub async fn submit_reg_ps(
     );
 
     // TODO: provide text format
-    send_mail(body.clone(), body, subject);
+    block(move || send_mail(body.clone(), body, subject)).await;
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -203,6 +241,7 @@ pub async fn submit_reg_ps(
 pub async fn submit_repair(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
+    pool: web::Data<PoolType>,
     form_data: web::Form<RepairData>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
@@ -226,6 +265,13 @@ pub async fn submit_repair(
     let repair_form: Forms = Forms::Repair(repair_data.clone());
     form_store(&repair_form);
 
+    // write databse
+    let clone_date = repair_data.clone();
+    match block(move || create_form_repair(&pool, &clone_date.into())).await {
+        Ok(()) => println!("write db success"),
+        Err(e) => println!("write db error: {}", e),
+    }
+
     // build data kvs json map
     let body = match hb.render("table", &repair_data.get_json_maps()) {
         Ok(body) => body,
@@ -240,7 +286,7 @@ pub async fn submit_repair(
     );
 
     // TODO: provide text format
-    send_mail(body.clone(), body, subject);
+    block(move || send_mail(body.clone(), body, subject)).await;
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
