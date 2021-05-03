@@ -13,7 +13,9 @@ pub enum Forms {
 #[derive(Deserialize, Debug, Serialize, Clone)]
 pub struct TrailData {
 	#[serde(default)]
+	#[serde(skip_serializing)]
 	pub token: String,
+
 	#[serde(default)]
 	pub form_type: String,
 
@@ -79,6 +81,7 @@ impl TrailData {
 #[derive(Deserialize, Debug, Serialize, Clone)]
 pub struct BuyData {
 	#[serde(default)]
+	#[serde(skip_serializing)]
 	pub token: String,
 
 	#[serde(default)]
@@ -133,6 +136,7 @@ impl BuyData {
 #[derive(Deserialize, Debug, Serialize, Clone)]
 pub struct RegisterDataPs {
 	#[serde(default)]
+	#[serde(skip_serializing)]
 	pub token: String,
 
 	#[serde(default)]
@@ -214,6 +218,7 @@ impl RegisterDataPs {
 #[derive(Deserialize, Debug, Serialize, Clone)]
 pub struct RegisterDataBu {
 	#[serde(default)]
+	#[serde(skip_serializing)]
 	pub token: String,
 
 	#[serde(default)]
@@ -311,6 +316,7 @@ impl RegisterDataBu {
 #[derive(Deserialize, Debug, Serialize, Clone)]
 pub struct RepairData {
 	#[serde(default)]
+	#[serde(skip_serializing)]
 	pub token: String,
 
 	#[serde(default)]

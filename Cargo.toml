@@ -13,6 +13,7 @@ actix-web = "3"
 actix-files = "0.3"
 actix-redis = "0.9.2"
 actix-rt = "1"
+#async-smtp = "0.4.0"
 csv = "1.1"
 chrono = "0.4.19"
 
@@ -22,7 +23,10 @@ dotenv = "0.15.0"
 env_logger = "0.8"
 envy = "0.4"
 handlebars = { version = "3.0.0", features = ["dir_source"] }
-lettre = "0.10.0-beta.3"
+
+lettre = { version = "0.10.0-beta.3", features = ["builder", "tokio02-native-tls", "tokio02"] }
+tokio = { version = "0.2", features = ["macros"] }
+
 lazy_static = "1.4"
 redis-async = "0.6.1"
 r2d2 = "0.8"
