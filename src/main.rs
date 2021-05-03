@@ -4,8 +4,12 @@ extern crate serde_json;
 extern crate lazy_static;
 #[macro_use]
 extern crate redis_async;
+#[macro_use]
+extern crate serde_derive;
 
+mod cache;
 mod config;
+mod errors;
 mod form_modal;
 pub mod handlers;
 mod mailer;

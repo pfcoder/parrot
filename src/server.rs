@@ -1,5 +1,6 @@
 //! Spin up a HTTPServer
 
+use crate::cache::add_cache;
 use crate::config::CONFIG;
 use crate::routes::routes;
 use actix_files::Files;
@@ -76,6 +77,7 @@ pub async fn server() -> std::io::Result<()> {
 
     let mut server = HttpServer::new(move || {
         App::new()
+            .configure(add_cache)
             .wrap(error_handlers())
             .wrap(Logger::default())
             .app_data(handlebars_ref.clone())

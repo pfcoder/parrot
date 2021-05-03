@@ -1,20 +1,36 @@
+use crate::cache::{delete, get, set, Cache};
 use crate::form_modal::{BuyData, Forms, RegisterDataBu, RegisterDataPs, RepairData, TrailData};
 use crate::mailer::send_mail;
 use crate::store::form_store;
-use actix_files::Files;
 use actix_web::http::StatusCode;
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{get, post, web, HttpResponse, Responder};
 use handlebars::Handlebars;
+use uuid::Uuid;
 
 #[post("/trail")]
 pub async fn submit_trail(
     hb: web::Data<Handlebars<'_>>,
+    cache: Cache,
     form_data: web::Form<TrailData>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
     // write form_data into csv file
     let trail_data = form_data.into_inner();
+
+    match get(cache.clone(), &trail_data.token).await {
+        Ok(_v) => {
+            // token verify pass
+            delete(cache, &trail_data.token).await;
+        }
+        Err(_e) => {
+            // token incorrect, redirect page
+            return HttpResponse::PermanentRedirect()
+                .header("Location", "/form/trail")
+                .finish();
+        }
+    }
+
     let trail_form: Forms = Forms::Trail(trail_data.clone());
     form_store(&trail_form);
 
@@ -42,12 +58,27 @@ pub async fn submit_trail(
 #[post("/buy")]
 pub async fn submit_buy(
     hb: web::Data<Handlebars<'_>>,
+    cache: Cache,
     form_data: web::Form<BuyData>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
     // write form_data into csv file
     let buy_data = form_data.into_inner();
+
+    match get(cache.clone(), &buy_data.token).await {
+        Ok(_v) => {
+            // token verify pass
+            delete(cache, &buy_data.token).await;
+        }
+        Err(_e) => {
+            // token incorrect, redirect page
+            return HttpResponse::PermanentRedirect()
+                .header("Location", "/form/buy")
+                .finish();
+        }
+    }
+
     let buy_form: Forms = Forms::Buy(buy_data.clone());
     form_store(&buy_form);
 
@@ -75,12 +106,27 @@ pub async fn submit_buy(
 #[post("/reg_bu")]
 pub async fn submit_reg_bu(
     hb: web::Data<Handlebars<'_>>,
+    cache: Cache,
     form_data: web::Form<RegisterDataBu>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
     // write form_data into csv file
     let regbu_data = form_data.into_inner();
+
+    match get(cache.clone(), &regbu_data.token).await {
+        Ok(_v) => {
+            // token verify pass
+            delete(cache, &regbu_data.token).await;
+        }
+        Err(_e) => {
+            // token incorrect, redirect page
+            return HttpResponse::PermanentRedirect()
+                .header("Location", "/form/reg_bu")
+                .finish();
+        }
+    }
+
     let regbu_form: Forms = Forms::RegisterBu(regbu_data.clone());
     form_store(&regbu_form);
 
@@ -108,12 +154,27 @@ pub async fn submit_reg_bu(
 #[post("/reg_ps")]
 pub async fn submit_reg_ps(
     hb: web::Data<Handlebars<'_>>,
+    cache: Cache,
     form_data: web::Form<RegisterDataPs>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
     // write form_data into csv file
     let regps_data = form_data.into_inner();
+
+    match get(cache.clone(), &regps_data.token).await {
+        Ok(_v) => {
+            // token verify pass
+            delete(cache, &regps_data.token).await;
+        }
+        Err(_e) => {
+            // token incorrect, redirect page
+            return HttpResponse::PermanentRedirect()
+                .header("Location", "/form/reg_ps")
+                .finish();
+        }
+    }
+
     let regps_form: Forms = Forms::RegisterPs(regps_data.clone());
     form_store(&regps_form);
 
@@ -141,12 +202,27 @@ pub async fn submit_reg_ps(
 #[post("/repair")]
 pub async fn submit_repair(
     hb: web::Data<Handlebars<'_>>,
+    cache: Cache,
     form_data: web::Form<RepairData>,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
     // write form_data into csv file
     let repair_data = form_data.into_inner();
+
+    match get(cache.clone(), &repair_data.token).await {
+        Ok(_v) => {
+            // token verify pass
+            delete(cache, &repair_data.token).await;
+        }
+        Err(_e) => {
+            // token incorrect, redirect page
+            return HttpResponse::PermanentRedirect()
+                .header("Location", "/form/repair")
+                .finish();
+        }
+    }
+
     let repair_form: Forms = Forms::Repair(repair_data.clone());
     form_store(&repair_form);
 
@@ -174,14 +250,20 @@ pub async fn submit_repair(
 #[get("/{form_type}")]
 pub async fn form_get(
     hb: web::Data<Handlebars<'_>>,
+    cache: Cache,
     web::Path(info): web::Path<String>,
 ) -> HttpResponse {
     let tplt = format!("form-{}", info);
     println!("tplt: {}", tplt);
 
+    let token = Uuid::new_v4().to_string();
+    println!("token: {}", token);
+
+    set(cache, &token, "1").await.unwrap();
+
     // prepare form data
     let data = json!({
-        "token": "abc", // TODO: test only
+        "token": token,
     });
 
     let body = match hb.render(&tplt, &data) {
