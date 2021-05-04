@@ -1,14 +1,10 @@
 use crate::config::CONFIG;
+use crate::errors::ApiError;
 use lettre::message::{header, MultiPart, SinglePart};
 use lettre::transport::smtp::authentication::Credentials;
-//use lettre::{AsyncSmtpTransport, Message, Tokio02Executor};
-use crate::errors::ApiError;
-use lettre::AsyncTransport;
-use lettre::{AsyncSmtpTransport, Message, Tokio02Executor};
+use lettre::Message;
 use lettre::{SmtpTransport, Transport};
 
-//use std::env;
-//#[tokio::main]
 pub fn send_mail(body_html: String, body_text: String, subject: String) -> Result<(), ApiError> {
     let to = &CONFIG.mail_receiver;
     let email = Message::builder()
@@ -43,41 +39,9 @@ pub fn send_mail(body_html: String, body_text: String, subject: String) -> Resul
         .build();
 
     // Send the email
-    mailer.send(&email)?;
+    match mailer.send(&email) {
+        Ok(_v) => println!("mail sent success"),
+        Err(e) => println!("mail sent fail: {}", e),
+    }
     Ok(())
-
-    /*let mailer: AsyncSmtpTransport<Tokio02Executor> =
-        AsyncSmtpTransport::<Tokio02Executor>::relay("smtp.163.com")
-            .unwrap()
-            .credentials(creds)
-            .build();
-
-    match mailer.send(email).await {
-        Ok(_) => println!("Email sent successfully!"),
-        Err(e) => println!("Could not send email: {:?}", e),
-    }*/
 }
-
-/*pub type Error = Box<dyn std::error::Error + Send + Sync>;
-pub type Result<T> = std::result::Result<T, Error>;
-
-use async_smtp::{ClientSecurity, Envelope, SendableEmail, SmtpClient, Transport};
-
-async fn send_mail(body_html: String, body_text: String, subject: String) -> Result<()> {
-    let email = SendableEmail::new(
-        Envelope::new(
-            Some("user@localhost".parse().unwrap()),
-            vec![CONFIG.mail_receiver.parse().unwrap()],
-        )?,
-        "id",
-        "Hello world",
-    );
-
-    // Create a client
-    let mut smtp = SmtpClient::new("127.0.0.1:2525").await?.into_transport();
-
-    // Connect and send the email.
-    smtp.send(email).await?;
-
-    Ok(())
-}*/

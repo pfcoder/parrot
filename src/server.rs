@@ -4,13 +4,11 @@ use crate::cache::add_cache;
 use crate::config::CONFIG;
 use crate::database::add_pool;
 use crate::routes::routes;
-use actix_files::Files;
 use actix_http::{body::Body, Response};
 use actix_web::dev::ServiceResponse;
 use actix_web::http::StatusCode;
-use actix_web::middleware;
 use actix_web::middleware::errhandlers::{ErrorHandlerResponse, ErrorHandlers};
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{web, App, HttpServer, Result};
 use handlebars::Handlebars;
 
 use actix_web::middleware::Logger;

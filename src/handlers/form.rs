@@ -8,6 +8,7 @@ use crate::models::form_register_ps::create_form_register_ps;
 use crate::models::form_repair::create_form_repair;
 use crate::models::form_trail::create_form_trail;
 use crate::store::form_store;
+use actix::Arbiter;
 use actix_web::http::StatusCode;
 use actix_web::{get, post, web, web::block, HttpResponse, Responder};
 use handlebars::Handlebars;
@@ -22,47 +23,29 @@ pub async fn submit_trail(
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
-    // write form_data into csv file
-    let trail_data = form_data.into_inner();
+    let data = form_data.into_inner();
+    let redirect = "/form/trail";
 
-    match get(cache.clone(), &trail_data.token).await {
+    match get(cache.clone(), &data.token).await {
         Ok(_v) => {
             // token verify pass
-            delete(cache, &trail_data.token).await;
+            let _ = delete(cache, &data.token).await;
         }
         Err(_e) => {
             // token incorrect, redirect page
             return HttpResponse::PermanentRedirect()
-                .header("Location", "/form/trail")
+                .header("Location", redirect)
                 .finish();
         }
     }
 
-    let trail_form: Forms = Forms::Trail(trail_data.clone());
-    form_store(&trail_form);
+    let body = hb
+        .render("table", &data.get_json_maps())
+        .unwrap_or("处理中...".to_string());
 
-    // write databse
-    let clone_date = trail_data.clone();
-    match block(move || create_form_trail(&pool, &clone_date.into())).await {
-        Ok(()) => println!("write db success"),
-        Err(e) => println!("write db error: {}", e),
-    }
-
-    // build data kvs json map
-    let body = match hb.render("table", &trail_data.get_json_maps()) {
-        Ok(body) => body,
-        Err(err) => {
-            format!("{}", err)
-        }
-    };
-
-    let subject = format!(
-        "{}, 申请人: {} 联系方式: {}",
-        trail_data.form_title, trail_data.applicant, trail_data.contact
-    );
-
-    // TODO: provide text format
-    block(move || send_mail(body.clone(), body, subject)).await;
+    Arbiter::spawn(async {
+        data_process(body, pool, Forms::Trail(data)).await;
+    });
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -78,47 +61,29 @@ pub async fn submit_buy(
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
-    // write form_data into csv file
-    let buy_data = form_data.into_inner();
+    let data = form_data.into_inner();
+    let redirect = "/form/buy";
 
-    match get(cache.clone(), &buy_data.token).await {
+    match get(cache.clone(), &data.token).await {
         Ok(_v) => {
             // token verify pass
-            delete(cache, &buy_data.token).await;
+            let _ = delete(cache, &data.token).await;
         }
         Err(_e) => {
             // token incorrect, redirect page
             return HttpResponse::PermanentRedirect()
-                .header("Location", "/form/buy")
+                .header("Location", redirect)
                 .finish();
         }
     }
 
-    let buy_form: Forms = Forms::Buy(buy_data.clone());
-    form_store(&buy_form);
+    let body = hb
+        .render("table", &data.get_json_maps())
+        .unwrap_or("处理中...".to_string());
 
-    // write databse
-    let clone_date = buy_data.clone();
-    match block(move || create_form_buy(&pool, &clone_date.into())).await {
-        Ok(()) => println!("write db success"),
-        Err(e) => println!("write db error: {}", e),
-    }
-
-    // build data kvs json map
-    let body = match hb.render("table", &buy_data.get_json_maps()) {
-        Ok(body) => body,
-        Err(err) => {
-            format!("{}", err)
-        }
-    };
-
-    let subject = format!(
-        "{}, 申请人: {} 联系方式: {}",
-        buy_data.form_title, buy_data.name, buy_data.contact
-    );
-
-    // TODO: provide text format
-    block(move || send_mail(body.clone(), body, subject)).await;
+    Arbiter::spawn(async {
+        data_process(body, pool, Forms::Buy(data)).await;
+    });
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -134,47 +99,29 @@ pub async fn submit_reg_bu(
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
-    // write form_data into csv file
-    let regbu_data = form_data.into_inner();
+    let data = form_data.into_inner();
+    let redirect = "/form/reg_bu";
 
-    match get(cache.clone(), &regbu_data.token).await {
+    match get(cache.clone(), &data.token).await {
         Ok(_v) => {
             // token verify pass
-            delete(cache, &regbu_data.token).await;
+            let _ = delete(cache, &data.token).await;
         }
         Err(_e) => {
             // token incorrect, redirect page
             return HttpResponse::PermanentRedirect()
-                .header("Location", "/form/reg_bu")
+                .header("Location", redirect)
                 .finish();
         }
     }
 
-    let regbu_form: Forms = Forms::RegisterBu(regbu_data.clone());
-    form_store(&regbu_form);
+    let body = hb
+        .render("table", &data.get_json_maps())
+        .unwrap_or("处理中...".to_string());
 
-    // write databse
-    let clone_date = regbu_data.clone();
-    match block(move || create_form_register_bu(&pool, &clone_date.into())).await {
-        Ok(()) => println!("write db success"),
-        Err(e) => println!("write db error: {}", e),
-    }
-
-    // build data kvs json map
-    let body = match hb.render("table", &regbu_data.get_json_maps()) {
-        Ok(body) => body,
-        Err(err) => {
-            format!("{}", err)
-        }
-    };
-
-    let subject = format!(
-        "{}, 申请人: {} 联系方式: {}",
-        regbu_data.form_title, regbu_data.name, regbu_data.tel
-    );
-
-    // TODO: provide text format
-    block(move || send_mail(body.clone(), body, subject)).await;
+    Arbiter::spawn(async {
+        data_process(body, pool, Forms::RegisterBu(data)).await;
+    });
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -191,46 +138,29 @@ pub async fn submit_reg_ps(
     println!("application: {:?}", form_data);
 
     // write form_data into csv file
-    let regps_data = form_data.into_inner();
+    let data = form_data.into_inner();
+    let redirect = "/form/reg_ps";
 
-    match get(cache.clone(), &regps_data.token).await {
+    match get(cache.clone(), &data.token).await {
         Ok(_v) => {
             // token verify pass
-            delete(cache, &regps_data.token).await;
+            let _ = delete(cache, &data.token).await;
         }
         Err(_e) => {
             // token incorrect, redirect page
             return HttpResponse::PermanentRedirect()
-                .header("Location", "/form/reg_ps")
+                .header("Location", redirect)
                 .finish();
         }
     }
 
-    let regps_form: Forms = Forms::RegisterPs(regps_data.clone());
-    form_store(&regps_form);
+    let body = hb
+        .render("table", &data.get_json_maps())
+        .unwrap_or("处理中...".to_string());
 
-    // write databse
-    let clone_date = regps_data.clone();
-    match block(move || create_form_register_ps(&pool, &clone_date.into())).await {
-        Ok(()) => println!("write db success"),
-        Err(e) => println!("write db error: {}", e),
-    }
-
-    // build data kvs json map
-    let body = match hb.render("table", &regps_data.get_json_maps()) {
-        Ok(body) => body,
-        Err(err) => {
-            format!("{}", err)
-        }
-    };
-
-    let subject = format!(
-        "{}, 申请人: {} 联系方式: {}",
-        regps_data.form_title, regps_data.name, regps_data.cell
-    );
-
-    // TODO: provide text format
-    block(move || send_mail(body.clone(), body, subject)).await;
+    Arbiter::spawn(async {
+        data_process(body, pool, Forms::RegisterPs(data)).await;
+    });
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -246,47 +176,29 @@ pub async fn submit_repair(
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
-    // write form_data into csv file
-    let repair_data = form_data.into_inner();
+    let data = form_data.into_inner();
+    let redirect = "/form/repair";
 
-    match get(cache.clone(), &repair_data.token).await {
+    match get(cache.clone(), &data.token).await {
         Ok(_v) => {
             // token verify pass
-            delete(cache, &repair_data.token).await;
+            let _ = delete(cache, &data.token).await;
         }
         Err(_e) => {
             // token incorrect, redirect page
             return HttpResponse::PermanentRedirect()
-                .header("Location", "/form/repair")
+                .header("Location", redirect)
                 .finish();
         }
     }
 
-    let repair_form: Forms = Forms::Repair(repair_data.clone());
-    form_store(&repair_form);
+    let body = hb
+        .render("table", &data.get_json_maps())
+        .unwrap_or("处理中...".to_string());
 
-    // write databse
-    let clone_date = repair_data.clone();
-    match block(move || create_form_repair(&pool, &clone_date.into())).await {
-        Ok(()) => println!("write db success"),
-        Err(e) => println!("write db error: {}", e),
-    }
-
-    // build data kvs json map
-    let body = match hb.render("table", &repair_data.get_json_maps()) {
-        Ok(body) => body,
-        Err(err) => {
-            format!("{}", err)
-        }
-    };
-
-    let subject = format!(
-        "{}, 申请人: {} 联系方式: {}",
-        repair_data.form_title, repair_data.name, repair_data.contact
-    );
-
-    // TODO: provide text format
-    block(move || send_mail(body.clone(), body, subject)).await;
+    Arbiter::spawn(async {
+        data_process(body, pool, Forms::Repair(data)).await;
+    });
 
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
@@ -323,4 +235,73 @@ pub async fn form_get(
     HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
         .body(body)
+}
+
+async fn data_process(mail_body: String, pool: web::Data<PoolType>, forms: Forms) {
+    match form_store(&forms) {
+        Ok(_v) => println!("write csv successfully"),
+        Err(e) => println!("write csv fail:{}", e),
+    }
+    // extract data
+    let subject;
+
+    match forms {
+        Forms::Trail(data) => {
+            subject = format!(
+                "{}, 申请人: {} 联系方式: {}",
+                data.form_title, data.applicant, data.contact
+            );
+
+            match block(move || create_form_trail(&pool, &data.clone().into())).await {
+                Ok(()) => println!("write db success"),
+                Err(e) => println!("write db error: {}", e),
+            }
+        }
+        Forms::Buy(data) => {
+            subject = format!(
+                "{}, 申请人: {} 联系方式: {}",
+                data.form_title, data.name, data.contact
+            );
+
+            match block(move || create_form_buy(&pool, &data.clone().into())).await {
+                Ok(()) => println!("write db success"),
+                Err(e) => println!("write db error: {}", e),
+            }
+        }
+        Forms::Repair(data) => {
+            subject = format!(
+                "{}, 申请人: {} 联系方式: {}",
+                data.form_title, data.name, data.contact
+            );
+
+            match block(move || create_form_repair(&pool, &data.clone().into())).await {
+                Ok(()) => println!("write db success"),
+                Err(e) => println!("write db error: {}", e),
+            }
+        }
+        Forms::RegisterPs(data) => {
+            subject = format!(
+                "{}, 申请人: {} 联系方式: {}",
+                data.form_title, data.name, data.cell
+            );
+
+            match block(move || create_form_register_ps(&pool, &data.clone().into())).await {
+                Ok(()) => println!("write db success"),
+                Err(e) => println!("write db error: {}", e),
+            }
+        }
+        Forms::RegisterBu(data) => {
+            subject = format!(
+                "{}, 申请人: {} 联系方式: {}",
+                data.form_title, data.name, data.tel
+            );
+
+            match block(move || create_form_register_bu(&pool, &data.clone().into())).await {
+                Ok(()) => println!("write db success"),
+                Err(e) => println!("write db error: {}", e),
+            }
+        }
+    }
+
+    let _ = block(move || send_mail(mail_body.clone(), mail_body, subject)).await;
 }
