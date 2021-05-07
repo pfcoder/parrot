@@ -24,6 +24,7 @@ pub struct Config {
 	pub mail_user: String,
 	pub mail_pwd: String,
 	pub mail_receiver: String,
+	pub use_db: u8,
 }
 
 // Throw the Config struct into a CONFIG lazy_static to avoid multiple processing

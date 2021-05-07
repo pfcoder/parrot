@@ -1,4 +1,5 @@
 use crate::cache::{delete, get, set, Cache};
+use crate::config::CONFIG;
 use crate::database::PoolType;
 use crate::form_modal::{BuyData, Forms, RegisterDataBu, RegisterDataPs, RepairData, TrailData};
 use crate::mailer::send_mail;
@@ -10,7 +11,7 @@ use crate::models::form_trail::create_form_trail;
 use crate::store::form_store;
 use actix::Arbiter;
 use actix_web::http::StatusCode;
-use actix_web::{get, post, web, web::block, HttpResponse, Responder};
+use actix_web::{get, post, web, web::block, HttpRequest, HttpResponse, Responder};
 use handlebars::Handlebars;
 use uuid::Uuid;
 
@@ -18,8 +19,9 @@ use uuid::Uuid;
 pub async fn submit_trail(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
-    pool: web::Data<PoolType>,
+    //pool: web::Data<PoolType>,
     form_data: web::Form<TrailData>,
+    req: HttpRequest,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
@@ -43,6 +45,11 @@ pub async fn submit_trail(
         .render("table", &data.get_json_maps())
         .unwrap_or("处理中...".to_string());
 
+    let pool = if CONFIG.use_db == 1 {
+        Some(req.app_data::<web::Data<PoolType>>().unwrap().clone())
+    } else {
+        None
+    };
     Arbiter::spawn(async {
         data_process(body, pool, Forms::Trail(data)).await;
     });
@@ -56,8 +63,9 @@ pub async fn submit_trail(
 pub async fn submit_buy(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
-    pool: web::Data<PoolType>,
+    //pool: web::Data<PoolType>,
     form_data: web::Form<BuyData>,
+    req: HttpRequest,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
@@ -81,6 +89,12 @@ pub async fn submit_buy(
         .render("table", &data.get_json_maps())
         .unwrap_or("处理中...".to_string());
 
+    let pool = if CONFIG.use_db == 1 {
+        Some(req.app_data::<web::Data<PoolType>>().unwrap().clone())
+    } else {
+        None
+    };
+
     Arbiter::spawn(async {
         data_process(body, pool, Forms::Buy(data)).await;
     });
@@ -94,8 +108,9 @@ pub async fn submit_buy(
 pub async fn submit_reg_bu(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
-    pool: web::Data<PoolType>,
+    //pool: web::Data<PoolType>,
     form_data: web::Form<RegisterDataBu>,
+    req: HttpRequest,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
@@ -119,6 +134,12 @@ pub async fn submit_reg_bu(
         .render("table", &data.get_json_maps())
         .unwrap_or("处理中...".to_string());
 
+    let pool = if CONFIG.use_db == 1 {
+        Some(req.app_data::<web::Data<PoolType>>().unwrap().clone())
+    } else {
+        None
+    };
+
     Arbiter::spawn(async {
         data_process(body, pool, Forms::RegisterBu(data)).await;
     });
@@ -132,8 +153,9 @@ pub async fn submit_reg_bu(
 pub async fn submit_reg_ps(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
-    pool: web::Data<PoolType>,
+    //pool: web::Data<PoolType>,
     form_data: web::Form<RegisterDataPs>,
+    req: HttpRequest,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
@@ -158,6 +180,12 @@ pub async fn submit_reg_ps(
         .render("table", &data.get_json_maps())
         .unwrap_or("处理中...".to_string());
 
+    let pool = if CONFIG.use_db == 1 {
+        Some(req.app_data::<web::Data<PoolType>>().unwrap().clone())
+    } else {
+        None
+    };
+
     Arbiter::spawn(async {
         data_process(body, pool, Forms::RegisterPs(data)).await;
     });
@@ -171,8 +199,9 @@ pub async fn submit_reg_ps(
 pub async fn submit_repair(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
-    pool: web::Data<PoolType>,
+    //pool: web::Data<PoolType>,
     form_data: web::Form<RepairData>,
+    req: HttpRequest,
 ) -> impl Responder {
     println!("application: {:?}", form_data);
 
@@ -195,6 +224,12 @@ pub async fn submit_repair(
     let body = hb
         .render("table", &data.get_json_maps())
         .unwrap_or("处理中...".to_string());
+
+    let pool = if CONFIG.use_db == 1 {
+        Some(req.app_data::<web::Data<PoolType>>().unwrap().clone())
+    } else {
+        None
+    };
 
     Arbiter::spawn(async {
         data_process(body, pool, Forms::Repair(data)).await;
@@ -237,7 +272,7 @@ pub async fn form_get(
         .body(body)
 }
 
-async fn data_process(mail_body: String, pool: web::Data<PoolType>, forms: Forms) {
+async fn data_process(mail_body: String, pool: Option<web::Data<PoolType>>, forms: Forms) {
     match form_store(&forms) {
         Ok(_v) => println!("write csv successfully"),
         Err(e) => println!("write csv fail:{}", e),
@@ -252,9 +287,11 @@ async fn data_process(mail_body: String, pool: web::Data<PoolType>, forms: Forms
                 data.form_title, data.applicant, data.contact
             );
 
-            match block(move || create_form_trail(&pool, &data.clone().into())).await {
-                Ok(()) => println!("write db success"),
-                Err(e) => println!("write db error: {}", e),
+            if CONFIG.use_db == 1 {
+                match block(move || create_form_trail(&pool.unwrap(), &data.clone().into())).await {
+                    Ok(()) => println!("write db success"),
+                    Err(e) => println!("write db error: {}", e),
+                }
             }
         }
         Forms::Buy(data) => {
@@ -263,9 +300,11 @@ async fn data_process(mail_body: String, pool: web::Data<PoolType>, forms: Forms
                 data.form_title, data.name, data.contact
             );
 
-            match block(move || create_form_buy(&pool, &data.clone().into())).await {
-                Ok(()) => println!("write db success"),
-                Err(e) => println!("write db error: {}", e),
+            if CONFIG.use_db == 1 {
+                match block(move || create_form_buy(&pool.unwrap(), &data.clone().into())).await {
+                    Ok(()) => println!("write db success"),
+                    Err(e) => println!("write db error: {}", e),
+                }
             }
         }
         Forms::Repair(data) => {
@@ -274,9 +313,12 @@ async fn data_process(mail_body: String, pool: web::Data<PoolType>, forms: Forms
                 data.form_title, data.name, data.contact
             );
 
-            match block(move || create_form_repair(&pool, &data.clone().into())).await {
-                Ok(()) => println!("write db success"),
-                Err(e) => println!("write db error: {}", e),
+            if CONFIG.use_db == 1 {
+                match block(move || create_form_repair(&pool.unwrap(), &data.clone().into())).await
+                {
+                    Ok(()) => println!("write db success"),
+                    Err(e) => println!("write db error: {}", e),
+                }
             }
         }
         Forms::RegisterPs(data) => {
@@ -285,9 +327,13 @@ async fn data_process(mail_body: String, pool: web::Data<PoolType>, forms: Forms
                 data.form_title, data.name, data.cell
             );
 
-            match block(move || create_form_register_ps(&pool, &data.clone().into())).await {
-                Ok(()) => println!("write db success"),
-                Err(e) => println!("write db error: {}", e),
+            if CONFIG.use_db == 1 {
+                match block(move || create_form_register_ps(&pool.unwrap(), &data.clone().into()))
+                    .await
+                {
+                    Ok(()) => println!("write db success"),
+                    Err(e) => println!("write db error: {}", e),
+                }
             }
         }
         Forms::RegisterBu(data) => {
@@ -296,9 +342,13 @@ async fn data_process(mail_body: String, pool: web::Data<PoolType>, forms: Forms
                 data.form_title, data.name, data.tel
             );
 
-            match block(move || create_form_register_bu(&pool, &data.clone().into())).await {
-                Ok(()) => println!("write db success"),
-                Err(e) => println!("write db error: {}", e),
+            if CONFIG.use_db == 1 {
+                match block(move || create_form_register_bu(&pool.unwrap(), &data.clone().into()))
+                    .await
+                {
+                    Ok(()) => println!("write db success"),
+                    Err(e) => println!("write db error: {}", e),
+                }
             }
         }
     }

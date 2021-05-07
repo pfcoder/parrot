@@ -43,8 +43,10 @@ where
 }
 
 pub fn add_pool(cfg: &mut web::ServiceConfig) {
-    let pool = InferPool::init_pool(CONFIG.clone()).expect("Failed to create connection pool");
-    match pool {
-        InferPool::Mysql(mysql_pool) => cfg.data(mysql_pool),
-    };
+    if CONFIG.use_db == 1 {
+        let pool = InferPool::init_pool(CONFIG.clone()).expect("Failed to create connection pool");
+        match pool {
+            InferPool::Mysql(mysql_pool) => cfg.data(mysql_pool),
+        };
+    }
 }

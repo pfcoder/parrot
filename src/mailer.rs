@@ -8,8 +8,8 @@ use lettre::{SmtpTransport, Transport};
 pub fn send_mail(body_html: String, body_text: String, subject: String) -> Result<(), ApiError> {
     let to = &CONFIG.mail_receiver;
     let email = Message::builder()
-        .from("test <bflpsupp@163.com>".parse().unwrap())
-        .reply_to("test <bflpsupp@163.com>".parse().unwrap())
+        .from("新表单 <bflpsupp@163.com>".parse().unwrap())
+        .reply_to("表单处理 <bflpsupp@163.com>".parse().unwrap())
         .to(to.parse().unwrap())
         .subject(subject)
         .multipart(
