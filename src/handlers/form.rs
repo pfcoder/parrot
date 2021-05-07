@@ -104,7 +104,7 @@ pub async fn submit_buy(
         .body(include_str!("../../static/templates/submit-ok.html"))
 }
 
-#[post("/reg_bu")]
+#[post("/businessreg")]
 pub async fn submit_reg_bu(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
@@ -149,7 +149,7 @@ pub async fn submit_reg_bu(
         .body(include_str!("../../static/templates/submit-ok.html"))
 }
 
-#[post("/reg_ps")]
+#[post("/personalreg")]
 pub async fn submit_reg_ps(
     hb: web::Data<Handlebars<'_>>,
     cache: Cache,
