@@ -2,7 +2,7 @@ use crate::cache::{delete, get, set, Cache};
 use crate::config::CONFIG;
 use crate::database::PoolType;
 use crate::form_modal::{BuyData, Forms, RegisterDataBu, RegisterDataPs, RepairData, TrailData};
-use crate::mailer::send_mail;
+use crate::mailer::ssmtp_mail;
 use crate::models::form_buy::create_form_buy;
 use crate::models::form_register_bu::create_form_register_bu;
 use crate::models::form_register_ps::create_form_register_ps;
@@ -353,5 +353,5 @@ async fn data_process(mail_body: String, pool: Option<web::Data<PoolType>>, form
         }
     }
 
-    let _ = block(move || send_mail(mail_body.clone(), mail_body, subject)).await;
+    let _ = block(move || ssmtp_mail(mail_body.clone(), mail_body, subject)).await;
 }
