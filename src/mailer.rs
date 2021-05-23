@@ -76,8 +76,8 @@ pub fn ssmtp_mail(body_html: String, body_text: String, subject: String) -> Resu
     }
 
     // start smtp shell ssmtp -t < testmail
-    Command::new("ssmtp")
-        .arg(format!("-t < {}", file_path))
+    Command::new("./sendmail.sh")
+        .arg(file_path)
         .spawn()
         .expect("ssmtp command failed to start");
 
