@@ -54,7 +54,7 @@ pub fn send_mail(body_html: String, body_text: String, subject: String) -> Resul
 pub fn ssmtp_mail(body_html: String, body_text: String, subject: String) -> Result<(), ApiError> {
     // create mail file
     let now: DateTime<Utc> = Utc::now();
-    let file_path = format!("./data/mail/{}.txt", now);
+    let file_path = format!("./data/mail/mail_{}.txt", now.timestamp_millis());
     let path = Path::new(&file_path);
     let display = path.display();
 
