@@ -59,7 +59,7 @@ pub fn ssmtp_mail(body_html: String, body_text: String, subject: String) -> Resu
     let display = path.display();
 
     let mail_tplt = format!(
-        "to: {}\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=utf-8\r\nSubject: {}\r\n\r\n{}",
+        "to: {}\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=utf-8\r\nSubject: {}\r\n\r\n\n\n{}",
         CONFIG.mail_receiver, subject, body_html
     );
 
